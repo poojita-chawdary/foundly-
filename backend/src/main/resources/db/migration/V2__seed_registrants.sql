@@ -1,65 +1,7 @@
--- V2: Seed 57 event registrants as Foundly users.
--- Default temporary password: Foundly@2026! (BCrypt $2b$10 / cost 10)
--- Users who already registered via Luma → membership = VERIFIED
--- Users who did not register yet → membership = PENDING
--- All users: role = USER, campus_id = 1 (Demo Campus), suspended = false
--- IMPORTANT: Users should change this default password on first login.
+-- V2: Seed initial administrator account.
+-- Email: polurupoojithachowdary@gmail.com
+-- Temporary password: Foundly2026 (BCrypt $2a$10)
+-- Role: ADMIN, Membership: VERIFIED
 
 INSERT INTO users (name, email, password_hash, role, campus_id, membership, suspended, created_at, updated_at) VALUES
-('Akshay',                         'akshaysingh520415@gmail.com',        '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Aryan',                          'pkmnaryan@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Syed',                           'yeds06384@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('B Bharath',                      'bandibharath88@gmail.com',            '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('KM Krishna',                     'krishna@serviti.ai',                  '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Vamshi Nyamathabad',             'vamshikrishna200606@gmail.com',       '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Nagaiah N',                      'nagaiah.nali@glochemindia.com',       '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Shaik Mahammad Lukhman Hakeem',  'hakeemshaik006@gmail.com',            '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('SNSALO IT',                      'snsaloit@gmail.com',                  '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Yalakarajula Srihari',           'yalakarajulasrihari@gmail.com',       '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Mahendra',                       'mahendra.perumandla@gmail.com',       '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Mohammed Wasif Ul Haq',          'wasif.haq434701@gmail.com',           '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Sampath Jalla',                  'jallasampath29@gmail.com',            '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Rahul Dasari',                   'dasarirahulpatel.9@gmail.com',        '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Mania Sree Tejaswani',           'maniasreetejaswani@gmail.com',        '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Bowyni Palli Ganesh',            'ganeshgoudd2006@gmail.com',           '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Dumpala Vamsidhar Reddy',        'nanivamsi10@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Nikhil Gogulapati',              'nikhilgsvs@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Julakanti Hari Charan Reddy',    'hcreddy0007@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('M Vrajesh Chary',                'vraeco.store@gmail.com',              '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Yaswanth Ketam',                 'yaswanthketham@gmail.com',            '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Mahesh',                         'maheshmahi63135@gmail.com',            '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Nandha Kishor Nyalapogula',      'nyalapogulanandhakishor@gmail.com',   '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Ashish Bachu',                   'ashishbachu118@gmail.com',             '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Haresh Gundela',                 'haresh@agentsbakery.com',              '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Qayyum',                         'm.a.q.z.2020@gmail.com',              '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Gamidi Subhashit',               'subhashit106@gmail.com',              '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Akshaj Echo',                    'akshajecho@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Anurag',                         'nemalipurianurag@gmail.com',           '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Vijaygopal Vemulapally',         'vvg357@outlook.com',                   '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Avinash Vijaykumar',             'reachkiran95@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Sai P',                          'sahishnu15.p@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Kumar Naik Katravath',           'kumarnaikhw@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Mohammad Mohi Uddin',            't.d.m.mohi@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Mohd Atif Ali Khan',             'atifkhan4076@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Sreeganesh Shelmohker',          'sreeganeshshelmohkar5@gmail.com',      '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('PriyaVandana K',                 'priyavandana24@gmail.com',             '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Shreyas Reddy',                  'shreyasrdy46@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Sameer Shaik',                   'shaiksameertech007@gmail.com',         '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Arun Reddy',                     'teamarunreddy@gmail.com',              '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Saikiran Chindam',               'chindhamsaikiran143@gmail.com',        '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Subhash Konduru',                'subhash.konduru@gmail.com',            '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Bala Marisetti',                 'sribalasai03@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Sravan Kumar',                   'sravankumar194@gmail.com',             '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Ashu Kumar',                     'ashurock200208@gmail.com',             '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Suman',                          'smnt2308@gmail.com',                   '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Yogender Verma',                 'yogendarverma0268@gmail.com',          '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Vikas Prajapati',                'vikas125509@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Vikas',                          'vikas15509@gmail.com',                 '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Vikas Prajapati',                'vikasprajapati1741370@gmail.com',      '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Saqawath Ali',                   'saqawathali567@gmail.com',             '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Puduru Koushik',                 'pudurukoushik@gmail.com',              '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Siddique (CSXIA)',               'siddique7111@gmail.com',               '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Shiva Sampath',                  'shivasampath311@gmail.com',            '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Mrudhula Reddy Komatireddy',    'reddymrudhula1005@gmail.com',          '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Venkat K',                       'hr16boltiot@zoho.com',                 '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)),
-('Shreya',                         'shreyab0514@gmail.com',                '$2b$10$vXzqDJ8KafSeh3ma1k2Ch.xKxLZc3i49sNgDhHrgq1dLHt452.BMe', 'USER', 1, 'PENDING',  false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6));
+('Poluru Poojita', 'polurupoojithachowdary@gmail.com', '$2a$10$REynuBVflnTRksNuvNL.LOTus1MFJUr4Q3fPv9ZV1HBxDxuzdhWxi', 'ADMIN', 1, 'VERIFIED', false, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6));

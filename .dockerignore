@@ -1,0 +1,14 @@
+.git
+.env
+**/.env
+**/.env.*
+**/node_modules
+**/target
+**/dist
+**/data
+**/*.tsbuildinfo
+*.zip
+docs/evidence
+.agents
+.codex
+.aws

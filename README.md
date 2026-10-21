@@ -6,6 +6,8 @@ A working student portfolio MVP: React + TypeScript on the frontend, Java 21 + S
 
 ## Start here
 
+For the current repository audit and Render setup, see [docs/AUDIT.md](docs/AUDIT.md) and [docs/RENDER.md](docs/RENDER.md). The Render files prepare deployment; the audit lists application defects still requiring separate fixes.
+
 The easiest local setup uses Docker Desktop or Docker Engine with Compose:
 
 ```sh

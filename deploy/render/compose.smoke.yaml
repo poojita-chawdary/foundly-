@@ -1,0 +1,43 @@
+# Local verification of the Render images; use an isolated Compose project name.
+services:
+  mysql:
+    image: foundly-render-mysql:local
+    environment:
+      MYSQL_DATABASE: foundly
+      MYSQL_USER: foundly
+      MYSQL_PASSWORD: ${RENDER_SMOKE_DB_PASSWORD:?Set a temporary test password}
+      MYSQL_ROOT_PASSWORD: ${RENDER_SMOKE_ROOT_PASSWORD:?Set a temporary test root password}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [CMD-SHELL, 'MYSQL_PWD="$$MYSQL_PASSWORD" mysql --ssl-mode=REQUIRED -h 127.0.0.1 -u foundly -e "SELECT 1" foundly']
+      interval: 5s
+      timeout: 5s
+      retries: 40
+  backend:
+    image: foundly-render-backend:local
+    environment:
+      DB_HOST: mysql
+      DB_USER: foundly
+      DB_PASSWORD: ${RENDER_SMOKE_DB_PASSWORD:?Set a temporary test password}
+      SPRING_PROFILES_ACTIVE: prod
+      MEMBERSHIP_MODE: MANUAL
+      UPLOAD_DIR: /var/data/images
+      SPRING_FLYWAY_CONNECT_RETRIES: "30"
+    volumes:
+      - images:/var/data
+    depends_on:
+      mysql:
+        condition: service_healthy
+  web:
+    image: foundly-render-frontend:local
+    ports: ["127.0.0.1:18080:10000"]
+    environment:
+      PORT: "10000"
+      BACKEND_HOST: backend
+    depends_on:
+      backend:
+        condition: service_healthy
+volumes:
+  mysql-data:
+  images:

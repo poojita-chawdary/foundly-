@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/foundly}
+    username: ${DB_USER:foundly}
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+server:
+  error:
+    include-message: never
+    include-stacktrace: never
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: ${COOKIE_SECURE:false}
+foundly:
+  uploads: ${UPLOAD_DIR:./data/images}
+  membership-mode: ${MEMBERSHIP_MODE:OPEN}
+  matching:
+    threshold: 35
+    category: 35
+    keywords: 25
+    colour: 15
+    location: 15
+    date: 10
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

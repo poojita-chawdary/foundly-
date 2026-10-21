@@ -1,0 +1,14 @@
+server:
+  servlet:
+    session:
+      cookie:
+        secure: true
+  forward-headers-strategy: framework
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+foundly:
+  uploads: ${UPLOAD_DIR}
+  membership-mode: ${MEMBERSHIP_MODE:MANUAL}

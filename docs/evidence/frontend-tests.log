@@ -1,0 +1,18 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> foundly-web@1.0.0 test
+> vitest run --testTimeout=20000
+
+
+ RUN  v3.2.4 /workspace/scratch/c549b666f0ea/foundly/frontend
+
+ ✓ src/App.test.tsx (7 tests) 2321ms
+   ✓ Foundly user interactions > shows a useful signed-out home with actual categories and no invented reports  642ms
+   ✓ Foundly user interactions > shows a server authentication error without navigating away  462ms
+   ✓ Report creation > submits report fields to the backend and opens the saved item  547ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  10:53:06
+   Duration  11.38s (transform 1.53s, setup 0ms, collect 6.16s, tests 2.32s, environment 1.24s, prepare 380ms)
+

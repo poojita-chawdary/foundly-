@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: foundly
+      MYSQL_USER: foundly
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+    volumes: [mysql-data:/var/lib/mysql]
+    healthcheck:
+      test:
+        [
+          CMD-SHELL,
+          'MYSQL_PWD="$$MYSQL_PASSWORD" mysql -u foundly -e "SELECT 1" foundly',
+        ]
+      interval: 10s
+      retries: 20
+  backend:
+    build: ./backend
+    environment:
+      DB_URL: jdbc:mysql://db:3306/foundly
+      DB_USER: foundly
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      UPLOAD_DIR: /data/images
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      MEMBERSHIP_MODE: ${MEMBERSHIP_MODE:-OPEN}
+    volumes: [images:/data/images]
+    depends_on:
+      db: { condition: service_healthy }
+  web:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [backend]
+volumes:
+  mysql-data:
+  images:

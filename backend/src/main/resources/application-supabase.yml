@@ -1,0 +1,11 @@
+spring:
+  flyway:
+    locations: classpath:db/postgresql
+    schemas: foundly
+    default-schema: foundly
+    create-schemas: false
+    connect-retries: 30
+  jpa:
+    properties:
+      hibernate:
+        default_schema: foundly

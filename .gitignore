@@ -3,3 +3,12 @@
 target/
 node_modules/
 dist/
+.vercel/
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+*.tsbuildinfo
+
+.vercel
+.env*

@@ -1,0 +1,6 @@
+# Legacy local Docker Compose only. Hosted deployment uses the supabase profile.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/foundly}
+    username: ${DB_USER:foundly}
+    password: ${DB_PASSWORD}

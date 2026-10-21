@@ -1,8 +1,6 @@
 spring:
-  datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/foundly}
-    username: ${DB_USER:foundly}
-    password: ${DB_PASSWORD}
+  profiles:
+    default: mysql
   jpa:
     open-in-view: false
     hibernate:

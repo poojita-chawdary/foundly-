@@ -6,11 +6,14 @@ RUN mvn -B -ntp verify
 
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends gosu curl \
+RUN apt-get update && apt-get install -y --no-install-recommends gosu curl ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 10001 foundly \
     && useradd --system --uid 10001 --gid foundly foundly
+COPY backend/src/main/resources/prod-ca-2021.crt /usr/local/share/ca-certificates/supabase.crt
+RUN update-ca-certificates
 COPY --from=build /app/target/foundly-1.0.0.jar /app/app.jar
+COPY backend/src/main/resources/prod-ca-2021.crt /app/prod-ca-2021.crt
 COPY deploy/render/start-backend.sh /app/start-backend.sh
 RUN sed -i 's/\r$//' /app/start-backend.sh && chmod 755 /app/start-backend.sh
 EXPOSE 8080

@@ -4,10 +4,8 @@ import campus.foundly.common.*;
 import campus.foundly.domain.*;
 import campus.foundly.security.Access;
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 import javax.imageio.ImageIO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.*;
@@ -16,19 +14,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional
 public class ImageService {
-  private final Path root;
   private final Store store;
   private final Access access;
   private final ReportService reports;
+  private final ImageStorage images;
 
-  public ImageService(
-      @Value("${foundly.uploads}") String root, Store store, Access access, ReportService reports)
-      throws IOException {
-    this.root = Path.of(root).toAbsolutePath().normalize();
-    Files.createDirectories(this.root);
+  public ImageService(Store store, Access access, ReportService reports, ImageStorage images) {
     this.store = store;
     this.access = access;
     this.reports = reports;
+    this.images = images;
   }
 
   public void upload(long id, MultipartFile file) throws IOException {
@@ -60,20 +55,17 @@ public class ImageService {
     }
     // Re-encoding removes EXIF metadata and ignores the supplied filename entirely.
     String key = UUID.randomUUID() + ".png";
-    Path path = root.resolve(key);
-    ImageIO.write(image, "png", path.toFile());
+    var content = new ByteArrayOutputStream();
+    if (!ImageIO.write(image, "png", content)) throw new IOException("PNG encoder is unavailable.");
+    images.put(key, content.toByteArray());
     String old = r.imageKey;
     r.imageKey = key;
     TransactionSynchronizationManager.registerSynchronization(
         new TransactionSynchronization() {
           @Override
           public void afterCompletion(int status) {
-            try {
-              if (status == STATUS_COMMITTED) {
-                if (old != null) Files.deleteIfExists(root.resolve(old));
-              } else Files.deleteIfExists(path);
-            } catch (IOException ignored) {
-            }
+            if (status == STATUS_COMMITTED) deleteQuietly(old);
+            else deleteQuietly(key);
           }
         });
   }
@@ -81,9 +73,15 @@ public class ImageService {
   public byte[] read(long id) throws IOException {
     var r = reports.readable(id);
     if (r.imageKey == null) throw new ApiException(404, "No image.");
-    Path path = root.resolve(r.imageKey).normalize();
-    if (!path.startsWith(root) || !Files.exists(path))
-      throw new ApiException(404, "Image not found.");
-    return Files.readAllBytes(path);
+    return images.get(r.imageKey);
+  }
+
+  private void deleteQuietly(String key) {
+    if (key == null) return;
+    try {
+      images.delete(key);
+    } catch (IOException ignored) {
+      // The database remains authoritative; a cleanup job can remove orphaned objects.
+    }
   }
 }

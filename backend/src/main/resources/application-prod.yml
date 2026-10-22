@@ -5,5 +5,4 @@ server:
         secure: true
   forward-headers-strategy: framework
 foundly:
-  uploads: ${UPLOAD_DIR}
   membership-mode: ${MEMBERSHIP_MODE:MANUAL}

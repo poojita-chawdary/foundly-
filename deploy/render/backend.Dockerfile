@@ -15,7 +15,7 @@ RUN update-ca-certificates
 COPY --from=build /app/target/foundly-1.0.0.jar /app/app.jar
 COPY backend/src/main/resources/prod-ca-2021.crt /app/prod-ca-2021.crt
 COPY deploy/render/start-backend.sh /app/start-backend.sh
-RUN sed -i 's/\r$//' /app/start-backend.sh && chmod 755 /app/start-backend.sh
+RUN sed -i 's/\r$//' /app/start-backend.sh && chmod 755 /app/start-backend.sh && chown -R foundly:foundly /app
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=5 \
     CMD curl --fail --silent http://127.0.0.1:8080/actuator/health || exit 1

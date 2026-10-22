@@ -1,56 +1,53 @@
-# Deployment guide
+# Deployment
 
-No deployment has been performed. There are no generated hosting URLs or live credentials.
+## Hosted design
 
-## Supported initial topology
+```text
+Browser -> Vercel frontend -> /api/* rewrite -> Render Spring API
+                                                -> Supabase Postgres
+                                                -> Supabase private Storage
+```
 
-Run one Nginx frontend container, one Java 21 backend instance, MySQL 8, and a persistent image volume. Keep the database and backend private on the application network. Expose only the frontend through an HTTPS reverse proxy or load balancer. The web container proxies `/api` to Java, preserving the single-origin session/CSRF design.
+Vercel's CDN logs will show `/api/reports/{id}/image` because the browser requests that URL from the Vercel origin. Vercel rewrites it to Render; the image bytes should be fetched by the backend from the private `foundly-images` Supabase Storage bucket. This preserves same-origin session cookies and CSRF handling. Never expose the Supabase service-role key or point frontend code directly at the bucket.
 
-The application needs no paid AI, mail, or external image-recognition service. A hosting provider may charge for compute, database, persistent disks, backups, and traffic. Check the selected provider’s current pricing before provisioning; no provider-specific costs are assumed here.
+## Render environment
 
-## Build and configure
+Configure the backend service with:
 
-1. Run `./mvnw verify` with JDK 21 and `npm ci && npm test && npm run build` before release.
-2. Build the included Dockerfiles. Backend build runs Maven verification; frontend uses the committed lockfile.
-3. Supply configuration through the platform’s secret manager/environment, never committed files:
+| Variable | Purpose |
+| --- | --- |
+| `SPRING_PROFILES_ACTIVE=supabase,prod` | Hosted database/storage profile and secure cookies |
+| `SUPABASE_DATABASE_URL` | Postgres session-pooler URL, port 5432 and `sslmode=verify-full` |
+| `SUPABASE_URL` | Project URL, e.g. `https://<project-ref>.supabase.co` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Private backend-only Storage access |
+| `SUPABASE_STORAGE_BUCKET=foundly-images` | Private PNG bucket |
+| `MEMBERSHIP_MODE=MANUAL` | Production membership workflow |
+| `COOKIE_SECURE=true` | HTTPS-only session cookie |
 
-| Variable                      | Purpose                                                                |
-| ----------------------------- | ---------------------------------------------------------------------- |
-| `SPRING_PROFILES_ACTIVE=prod` | Enables required external configuration and Secure cookies             |
-| `DB_URL`                      | Managed MySQL JDBC connection string; use provider CA/TLS requirements |
-| `DB_USER`                     | Dedicated application database user                                    |
-| `DB_PASSWORD`                 | Application database password                                          |
-| `UPLOAD_DIR`                  | Absolute path on a persistent mounted volume                           |
-| `MEMBERSHIP_MODE=MANUAL`      | Human campus verification, rather than demo open registration          |
+The Supabase database URL remains required: the app's backend must authenticate to its database. Remove the old MySQL-specific `DB_HOST`, `DB_USER`, `DB_PASSWORD`, and `DB_SSL_MODE` from Render after confirming the Supabase connection. No database or storage secrets belong on Vercel. Render CLI v2.28 has no environment-variable subcommand; use the service's Environment settings for secrets.
 
-4. Use a managed MySQL 8-compatible server with verified TLS. Example connection parameters include `sslMode=VERIFY_IDENTITY`; install the provider CA through Java’s supported trust-store configuration as required. Do not disable certificate validation.
-5. Run Flyway migrations once as part of startup/release. Hibernate uses `ddl-auto=validate`. Give migrations the required schema privileges; for a larger deployment, use separate migration and runtime database roles.
-6. Terminate HTTPS at a trusted proxy, and keep direct backend access private. The production Spring profile enables Secure, HttpOnly, SameSite=Lax session cookies. Never enable OPEN membership unintentionally for a real campus.
-7. Create and manually verify the first administrator using the documented database operator process. No known admin password is built in.
-8. Back up MySQL and the image volume together. Practise restoring them to a test environment. Keep `.env`, volumes, and backups out of source control.
+## Supabase CLI
 
-## Reverse proxy details
+The linked project is `foundly` (`afnbdrltoxyilkvxrgny`, Singapore). The private image bucket is provisioned by `supabase/migrations/20261022090000_foundly_private_images_bucket.sql`:
 
-The supplied Nginx file is intended for local Compose. For production HTTPS termination:
+```powershell
+npx supabase login
+npx supabase link --project-ref afnbdrltoxyilkvxrgny
+npx supabase db push --linked
+```
 
-- At the TLS edge, overwrite forwarded headers; never pass untrusted caller-supplied values as authoritative.
-- If the web container receives trusted `X-Forwarded-Proto` from the edge, preserve the trusted HTTPS value when forwarding to Spring, rather than overwriting it with the internal HTTP `$scheme`.
-- Set HSTS at the HTTPS edge after verifying the HTTPS configuration.
-- Keep the configured CSP and nosniff headers, and apply upload/body limits and request timeouts.
-- Configure IP-aware login/write limits at the trusted edge. The application’s simple rate limiter otherwise sees the proxy’s IP, sharing its quota among users.
+The migration is already applied. It restricts objects to PNG and 5 MiB. Existing Postgres report rows currently reference six image keys, but the bucket has zero objects. The repository contains no source copies; recover those images from their original files or a surviving Render copy and re-upload them. The logs alone contain request paths, not image payloads.
 
-Keep frontend and API on the same origin. If you intentionally split origins, you must separately design explicit credentialed CORS allowlists, cookie domain/SameSite handling, and CSRF token delivery. The included configuration intentionally does not implement that topology.
+## Vercel
 
-## Health and release checks
+The Vercel project Root Directory is `frontend`; `frontend/vercel.json` configures Vite and rewrites `/api/*` to `https://foundly-xoro.onrender.com/api/*`. The client uses relative `/api` calls and needs no `VITE_API_URL`. Keep frontend and API same-origin from the browser's perspective, don't add wildcard CORS, and ensure API responses remain `no-store`.
 
-`GET /actuator/health` exposes a minimal health summary. The backend container is not published directly by Compose. A platform health check should reach this endpoint on the private application network. Nginx serves the built frontend and proxies API paths.
+## Release checks
 
-Before accepting users, validate **against real MySQL**: clean migrations, registration/session/CSRF, two-account report→claim→return, image persistence after restart, hidden-report privacy, role restrictions, manual membership verification, backup/restore, and HTTPS cookies. The automated H2 suite is useful but does not verify MySQL collation, production deadlocks, disk permissions, reverse-proxy settings, or browser rendering.
+1. Confirm Supabase database URL and service-role key are configured privately on Render.
+2. Apply reviewed database/storage migrations using the Supabase CLI.
+3. Run backend verification and frontend tests/build; push the reviewed commit.
+4. Deploy the pushed backend commit to the existing Render service (auto-deploy is currently off); Vercel deploys from its connected GitHub project.
+5. Check Render `/actuator/health`, then exercise login, CSRF, report listing, image upload/read, and logout in a signed-in browser. Vercel `/api/*` requests are expected; inspect their status and Render application logs for failures.
 
-## Scaling and persistent storage
-
-Images use a configured persistent filesystem path, not ephemeral container storage. There is no object-storage implementation in this MVP. Use a durable volume for one instance. To scale horizontally, implement object storage behind an image storage interface, shared sessions (Spring Session/JDBC or Redis), distributed abuse controls, and background candidate matching. Do not run multiple instances against separate local image folders.
-
-## Migrations and recovery
-
-Do not edit an applied migration in a running environment. Add a new `V2__...sql` migration. Back up first and test against a restored copy of the production database. For rollback, redeploy a compatible previous application version; a destructive schema rollback requires a separately reviewed recovery plan. Removing a Docker volume is not a migration strategy.
+This is not a production sign-off. The current Render backend uses one free instance, so idle sleep and in-memory session loss on restart are expected. Before a real launch, validate secure cookies and proxy behavior, abuse controls, campus verification, backup/restore of Postgres and Storage, alerts, and account recovery. Local Compose development still uses MySQL and local image storage; see [RENDER.md](RENDER.md) for local run steps and the split-hosting details.

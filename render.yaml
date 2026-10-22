@@ -1,82 +1,31 @@
 # yaml-language-server: $schema=https://render.com/schema/render.yaml.json
-# Paid, single-instance deployment. Review docs/RENDER.md before provisioning.
+# Split deployment: Vercel frontend, Render API, Supabase Postgres and private Storage.
 services:
-  - type: pserv
-    name: foundly-mysql
-    runtime: docker
-    region: singapore
-    plan: standard
-    dockerfilePath: ./deploy/render/mysql.Dockerfile
-    dockerContext: .
-    autoDeployTrigger: "off"
-    disk:
-      name: foundly-mysql-data
-      mountPath: /var/lib/mysql
-      sizeGB: 10
-    envVars:
-      - key: MYSQL_DATABASE
-        value: foundly
-      - key: MYSQL_USER
-        value: foundly
-      - key: MYSQL_PASSWORD
-        generateValue: true
-      - key: MYSQL_ROOT_PASSWORD
-        generateValue: true
-
-  - type: pserv
+  - type: web
     name: foundly-api
     runtime: docker
     region: singapore
-    plan: standard
+    plan: free
     dockerfilePath: ./deploy/render/backend.Dockerfile
     dockerContext: .
     autoDeployTrigger: "off"
-    disk:
-      name: foundly-images
-      mountPath: /var/data
-      sizeGB: 1
+    healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: prod
+        value: supabase,prod
       - key: SERVER_PORT
         value: "8080"
-      - key: UPLOAD_DIR
-        value: /var/data/images
+      - key: COOKIE_SECURE
+        value: "true"
       - key: MEMBERSHIP_MODE
         value: MANUAL
-      - key: DB_HOST
-        fromService:
-          type: pserv
-          name: foundly-mysql
-          property: host
-      - key: DB_USER
-        value: foundly
-      - key: DB_PASSWORD
-        fromService:
-          type: pserv
-          name: foundly-mysql
-          envVarKey: MYSQL_PASSWORD
-      - key: DB_SSL_MODE
-        value: REQUIRED
-      - key: SPRING_FLYWAY_CONNECT_RETRIES
-        value: "60"
+      - key: SUPABASE_URL
+        value: https://afnbdrltoxyilkvxrgny.supabase.co
+      - key: SUPABASE_STORAGE_BUCKET
+        value: foundly-images
+      - key: SUPABASE_DATABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
       - key: JAVA_TOOL_OPTIONS
         value: -XX:MaxRAMPercentage=65.0 -Djava.awt.headless=true -Duser.timezone=UTC
-
-  - type: web
-    name: foundly-web
-    runtime: docker
-    region: singapore
-    plan: starter
-    dockerfilePath: ./deploy/render/frontend.Dockerfile
-    dockerContext: .
-    autoDeployTrigger: "off"
-    healthCheckPath: /healthz
-    envVars:
-      - key: PORT
-        value: "10000"
-      - key: BACKEND_HOST
-        fromService:
-          type: pserv
-          name: foundly-api
-          property: host

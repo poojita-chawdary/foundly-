@@ -2,11 +2,11 @@
 
 **Lost something? Let’s find it.**
 
-A working student portfolio MVP: React + TypeScript on the frontend, Java 21 + Spring Boot 3.5 on the backend, and MySQL 8 with Flyway migrations. All item reports, claims, notifications, suggestions, and moderation statistics are database-backed. The application ships without invented reports or default user passwords.
+A working student portfolio MVP: React + TypeScript on the frontend, Java 21 + Spring Boot 3.5 on the backend, Supabase Postgres for hosted data, and private Supabase Storage for hosted report images. Local development can still use MySQL 8 with Flyway. All item reports, claims, notifications, suggestions, and moderation statistics are database-backed.
 
 ## Start here
 
-For the current repository audit and Render setup, see [docs/AUDIT.md](docs/AUDIT.md) and [docs/RENDER.md](docs/RENDER.md). The Render files prepare deployment; the audit lists application defects still requiring separate fixes.
+For the current repository audit and split-hosting setup, see [docs/AUDIT.md](docs/AUDIT.md) and [docs/RENDER.md](docs/RENDER.md). The frontend is served by Vercel, `/api/*` is rewritten to the Render Java API, and the API connects to Supabase Postgres and its private Storage bucket.
 
 The easiest local setup uses Docker Desktop or Docker Engine with Compose:
 
@@ -107,7 +107,7 @@ The browser and API use one origin. Spring Security keeps the login session in a
 
 Every service action checks the current database user’s membership/suspension state; account suspension therefore also blocks existing sessions. Role and ownership checks happen on the backend. Public report DTOs never include emails, password hashes, or private claim evidence. Claim summaries omit evidence even for the claimant. The evidence endpoint is only for authorised reviewers on the same campus.
 
-Passwords must be 12–72 characters and no more than 72 UTF-8 bytes because BCrypt truncates long byte sequences. Uploads are PNG/JPEG only, up to 5 MB and 12 megapixels, decoded and re-encoded as PNG under a generated UUID. Files live outside the database and are served through a permission-checked API. Static Nginx applies a content security policy. Users still need to avoid posting sensitive content in free text or photos.
+Passwords must be 12–72 characters and no more than 72 UTF-8 bytes because BCrypt truncates long byte sequences. Uploads are PNG/JPEG only, up to 5 MB and 12 megapixels, decoded and re-encoded as PNG under a generated UUID. Hosted files live in a private Supabase Storage bucket and are served through the permission-checked Render API; the service-role key stays on Render. Users still need to avoid posting sensitive content in free text or photos.
 
 Transactions and pessimistic report locks protect claim approval; a campus lock serialises report changes and matching upserts. Unique constraints provide an additional duplicate safeguard. Rate limits cover writes and authentication per IP per application instance; production needs proxy-level distributed abuse controls.
 
